@@ -1,0 +1,80 @@
+/*.container > .row {
+    margin-top: 7%;
+    margin-bottom: 7%;
+}*/
+
+#calculatrice {
+    background-color: lightgrey;
+    border: 2px solid black;
+
+    margin-top: 7%;
+    margin-bottom: 7%;
+    padding: 5%;
+}
+
+div[id^=ecran]{
+    background-color: gray;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: right;
+    margin-bottom: 5%;
+}
+
+.btn { /* * Les boutons occupe tous la place*/
+    width: 100%;
+}
+
+/* *
+    Les boutons sont alignés en colonne
+    et ont un leger espace entre eux
+*/
+.bouton{
+    padding: 1%;
+    text-align: center;
+}
+
+/* * Gestion spécial du bouton EXE*/
+#boutonExe {
+    text-align: center;
+    color: white;
+    position : absolute;
+    top: 30%    ;
+}
+.boutonExe > .row {
+    border-radius: 10px ;
+    background-color: black;
+}
+.boutonExe .row {
+    height: 100%;
+}
+
+
+/* * Application aux boutons leur couleur*/
+.nombre > .btn{
+    border-radius:10px ;
+    background-color: orange;
+}
+.effacement > .btn{
+    border-radius:10px ;
+    background-color: #ff6666;
+}
+.operation > .btn{
+    border-radius:10px ;
+    background-color: yellow;
+}
+.fonction > .btn{
+    border-radius:10px ;
+    background-color: grey;
+    font-weight: bold;
+}
+
+/* * Style dynamique */
+.btn:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.boutonExe > .row:hover {
+    background-color: #4caF50;
+    color: white;
+}

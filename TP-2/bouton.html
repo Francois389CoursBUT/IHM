@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<title>My Button</title>
+        <script src="monScript_basic.js" type="text/javascript" defer></script>
+    </head>
+    <body>
+        <p>
+            <button id="decrementeBouton">
+                - 1
+            </button>
+            <button id="myButtonID">
+                Cliquer pour ajouter 1
+            </button>
+            <button id="incrementeBouton">
+                + 1
+            </button>
+            <button id="resetAjout">
+                Remettre &agrave; 1
+            </button>
+        </p>
+        <p>
+            <input type="text" id="ajoutManuel" placeholder="Entrez le nombre pour incrémentation">
+            <!-- Message d'alerte si la saisie de l'utilisateur n'est pas un nombre-->
+            <div id="messageAlerte">Attention il faut saisir un entier !</div>
+        </p>
+        <p>
+            <label for="autoriseIncrementNegatif">Autoriser d&eacute;crementation n&eacute;gatif : </label>
+            <input type="checkbox" id="autoriseIncrementNegatif">
+        </p>
+        <p>
+            <button id="resetBouton">
+                Mettre à zéro
+            </button>
+        </p>
+        <p>
+            Le nombre de clics est : <span id="displayednombreCompteur"></span>
+        </p>
+        <p>
+            <!--Bouton pour changer la couleur de tous les boutons-->
+            <button id="changeColorButton">
+                Changer la couleur des boutons
+            </button>
+            <!--Liste pour choisir la couleur parmi noir, vert, rouge et bleu-->
+            <select id="colorList">
+                <option value="black">Noir</option>
+                <option value="green">Vert</option>
+                <option value="red">Rouge</option>
+                <option value="blue">Bleu</option>
+            </select>
+        </p>
+    </body>
+</html>
+    
