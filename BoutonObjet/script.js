@@ -31,10 +31,6 @@ class View {
         this.#myButton = document.getElementById(buttonID);
         console.log("View initialisé");
     }
-
-    getButton() {
-        return this.#myButton;
-    }
     
     /**
      * Met à jour l'affichage avec le nombre passé en paramètre
@@ -43,6 +39,10 @@ class View {
     updateView(n) {
         this.#display.innerText = n;
         console.log("View mise à jour");
+    }
+
+    bindMyButton(arg) {
+        this.#myButton.addEventListener("click",arg);
     }
 }
 
@@ -58,7 +58,7 @@ class Controller {
     constructor(argModel, argView) {
         this.model = argModel;
         this.view = argView;
-        this.view.getButton().addEventListener("click", () => {this.callBack()});
+        this.view.bindMyButton(this.callBack);
         console.log("Controller initialisé");
     }
 
@@ -71,12 +71,12 @@ class Controller {
         console.log("Le controller update le model");
         this.model.increment();
     }
-
-    callBack() {
+    
+    callBack = () => {
         console.clear();
         console.log("Le controller reçoit un signal");
         this.updateModel();
-        
+
     }
 }
 
