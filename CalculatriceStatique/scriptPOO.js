@@ -1,8 +1,10 @@
 class Model {
     #nombreAffiche;
+    #operandeGauche;
 
     constructor(nombre) {
-        this.#nombreAffiche = nombre;
+        this.#nombreAffiche = nombre.toString();
+        this.#operandeGauche = null;
     }
 
     calcul (operation, operandeDroite) {
@@ -31,6 +33,19 @@ class Model {
 
     getNombreAffiche () {
         return this.#nombreAffiche;
+    }
+
+    updateModelAvecNombre (n) {
+        if (this.#nombreAffiche === "0") {
+            this.#nombreAffiche = "";
+        } 
+        this.#nombreAffiche = this.#nombreAffiche + "" + n;
+        console.log("Mise à jour model ");
+    }
+
+    updateModelAvecOperation () {
+
+
     }
 }
 
@@ -66,11 +81,31 @@ class View {
     }
 
     update(n) {
-        this.#ecran.innerText = n;
+        console.log("Mise à Jour de la vue");
+        if (n.length >= 10) {
+            this.#ecran.innerText = "  OVERFLOW"
+        } else {
+            this.#ecran.innerText = n;
+        }
     }
 
     getBoutons() {
         return this.#collectionBouton;
+    }
+
+    /**
+     * @param {Function} fonction 
+     */
+    bindButtonNombre (fonction) {
+        for (const boutonNombre of this.#collectionBouton['nombre']) {
+            boutonNombre.addEventListener("click",() => {fonction(boutonNombre.innerText)});
+        }
+    }
+
+    bindButtonEffacement (fonction) {
+        for (const boutonEffacement of this.#collectionBouton['effacement']) {
+            boutonEffacement.addEventListener("click", () => {fonction(boutonEffacement)})
+        }
     }
 }
 
@@ -81,11 +116,34 @@ class Controller {
         this.model = argModel;
         this.view = argView;
         console.log("Controleur initialisé");
+        this.view.bindButtonNombre(this.callBackNombre);
+        this.view.bindButtonEffacement(this.callBackEffacement);
+    }
+
+    updateView () {
+        console.log("Controlleur demande update vue");
+        this.view.update(this.model.getNombreAffiche());
+    }
+
+    updateModelAvecNombre (n) {
+        console.log("Controleur demande update model");
+        this.model.updateModelAvecNombre(n)
+    }
+
+    callBackNombre = (n) => {
+        console.log("");
+        console.log("Bouton " + n + " cliqué");
+        this.updateModelAvecNombre(n)
+        this.updateView();
+    }
+
+    callBackEffacement = (bouton) => {
+        console.log("Bouton d'effacement (" + bouton.innerText + ") cliqué");
+
     }
 }
 
 console.log("Lancement application");
 const app = new Controller(new Model(0), new View("ecran"))
 console.log("Application lancé");
-app.view.update(app.model.getNombreAffiche());
-console.log(app.view.getBoutons()['nombre'].item(1).innerText);
+app.updateView();
