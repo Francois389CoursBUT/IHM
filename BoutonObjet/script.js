@@ -32,7 +32,9 @@ class View {
         console.log("View initialisé");
     }
 
-
+    getButton() {
+        return this.#myButton;
+    }
     
     /**
      * Met à jour l'affichage avec le nombre passé en paramètre
@@ -56,10 +58,30 @@ class Controller {
     constructor(argModel, argView) {
         this.model = argModel;
         this.view = argView;
+        this.view.getButton().addEventListener("click", () => {this.callBack()});
         console.log("Controller initialisé");
+    }
+
+    updateView() {
+        console.log("Le controller update la view");
+        this.view.updateView(this.model.getNumber());
+    }
+
+    updateModel() {
+        console.log("Le controller update le model");
+        this.model.increment();
+    }
+
+    callBack() {
+        console.clear();
+        console.log("Le controller reçoit un signal");
+        this.updateModel();
+        
     }
 }
 
 console.log("Lancement de l'application ...");
 const app = new Controller(new Model(0), new View("display","myButton"));
 console.log("L'application est lancée");
+console.log(app.model.getNumber());
+app.view.updateView(app.model.getNumber());
