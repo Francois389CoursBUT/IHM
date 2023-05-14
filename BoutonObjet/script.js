@@ -47,8 +47,8 @@ class View {
 }
 
 class Controller {
-    model;
-    view;
+    #model;
+    #view;
     
     /**
      * The constructor function for the Controller class.
