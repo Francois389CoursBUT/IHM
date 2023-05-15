@@ -9,11 +9,11 @@ class Model {
     }
 
     /**
-     * Retourne les calcul de operandeGauche et de operandeDroite 
+     * Retourne les calculs de operandeGauche et de operandeDroite
      * par l'opération mathématique operation
-     * @param {Integer} operandeGauche 
+     * @param {number} operandeGauche
      * @param {String} operation 
-     * @param {Integer} operandeDroite 
+     * @param {number} operandeDroite
      */
     calcul (operandeGauche, operation, operandeDroite) {
         let resultat;
@@ -59,7 +59,7 @@ class Model {
      * @param {int} n 
      */
     updateModelAvecNombre (n) {
-        if (this.#nombreAffiche == "0") {
+        if (this.#nombreAffiche === "0") {
             this.#nombreAffiche = "";
         } 
         this.#nombreAffiche = this.#nombreAffiche + "" + n;
@@ -69,7 +69,7 @@ class Model {
 
     updateAvecOperation (textOperation) {
         if (this.#operandeGauche === null) {
-            /* Exemple : L'utilisateur à saisie "3" puis "+", on enregistre ces donnés */
+            /* Exemple : L'utilisateur a saisi "3" puis "+", on enregistre ces donnés */
             this.#operandeGauche = parseFloat(this.#nombreAffiche);
             this.#operationSaisie = textOperation;
             this.#nombreAffiche = "";
@@ -101,6 +101,12 @@ class Model {
             break;
         default:
             break;
+        }
+    }
+
+    updateModelAvecPoint () {
+        if (this.#nombreAffiche.indexOf(".") === -1) {
+            this.#nombreAffiche = this.#nombreAffiche + ".";
         }
     }
 
@@ -174,15 +180,23 @@ class View {
 
     /**
      * Vérifie si le texte entré est valide.
-     * C'est à dire qu'il ne contient pas plus de 10 chiffres, 
-     * le point, et la dernière opération saisie
+     * C'est-à-dire qu'il ne contient pas plus de 10 chiffres,
+     * le point et la dernière opération saisie
      * 
-     * @param {boolean} text 
+     * @param {String} text
      * @returns 
      */
     affichageEstValide(text) {
+        //TODO écrire test
         let valide = false;
-        //TODO Ecrire test
+        if (text.toString().includes(".")) {
+            valide = text.length <= 11;
+        } else {
+            valide = text.length <= 10;
+        }
+        if (!valide) {
+            console.log("Affichage invalide" + text)
+        }
         return valide;
     }
 
@@ -203,7 +217,7 @@ class View {
 
     /**
      * 
-     * @param {Function} fonction La fonction à éxécuter au clique
+     * @param {Function} fonction La fonction à exécuter aux clique sur le bouton
      */
     bindButtonEffacement (fonction) {
         for (let index = 0; index < Object.keys(this.#collectionBouton['effacement']).length; index++) {
@@ -223,6 +237,10 @@ class View {
             boutonOperation.addEventListener("click", () => {fonction(boutonOperation)})
         }
     }
+
+    bindButtonPoint (fonction) {
+        this.#collectionBouton['dot'].addEventListener("click", () => {fonction(this.#collectionBouton['dot'])})
+    }
 }
 
 class Controller {
@@ -238,10 +256,17 @@ class Controller {
         this.model = argModel;
         this.view = argView;
         console.log("Controleur initialisé");
+
+        /* Initialisation des fonctions de rappel */
         this.view.bindButtonNombre(this.callBackNombre);
         this.view.bindButtonEffacement(this.callBackEffacement);
+        this.view.bindButtonOperation(this.callBackOperation);
+        this.view.bindButtonPoint(this.callBackPoint);
     }
 
+    /**
+     * Demande la mise à jour de la vue.
+     */
     updateView () {
         console.log("Controlleur demande update vue");
         this.view.update(this.model.getOperandeGauche(),
@@ -250,7 +275,7 @@ class Controller {
     }
 
     /**
-     * 
+     * Met à jour le modèle avec le nombre cliqué
      * @param {int} n 
      */
     updateModelAvecNombre (n) {
@@ -259,7 +284,7 @@ class Controller {
     }
 
     /**
-     * 
+     * Met à jour le modèle avec la méthode d'effacement demandé
      * @param {HTMLElement} bouton 
      */
     updateModelEffacement (bouton) {
@@ -268,30 +293,58 @@ class Controller {
     }
 
     /**
-     * 
-     * @param {String} bouton 
+     * Met à jour le modèle avec l'opération demandé
+     * @param {String} boutonText
      */
     updateModelAvecOperation(boutonText) {
         this.model.updateAvecOperation(boutonText);
     }
 
-    callBackNombre = (n) => {
+    /**
+     * Met à jour le modèle avec le point décimal
+     */
+    updateModelAvecPoint() {
+        console.log("Update du modéle demandé par le controlleur suite aux clique d'un point");
+        this.model.updateModelAvecPoint();
+    }
+
+    /**
+     * Callback appelé lors du clique sur un bouton nombre
+     * @param nombre
+     */
+    callBackNombre = (nombre) => {
         console.log("");
-        console.log("Bouton " + n + " cliqué");
-        this.updateModelAvecNombre(n)
+        console.log("Bouton " + nombre + " cliqué");
+        this.updateModelAvecNombre(nombre)
         this.updateView();
     }
 
+    /**
+     * Callback appelé lors du clique sur un bouton d'effacement
+     * @param bouton
+     */
     callBackEffacement = (bouton) => {
         console.log("Bouton d'effacement (" + bouton.innerText + ") cliqué");
         this.updateModelEffacement(bouton);
         this.updateView();
     }
 
+    /**
+     * Callback appelé lors du clique sur un bouton d'opération
+     * @param bouton
+     */
     callBackOperation = (bouton) => {
         console.log("Opération (" + bouton.innerText + ") cliqué");
         this.updateModelAvecOperation(bouton.innerText);
         this.updateView();
+    }
+
+    /**
+     * Callback appelé lors du clique sur le bouton point
+     */
+    callBackPoint = (bouton) => {
+        console.log("Bouton Point cliqué");
+        this.updateModelAvecPoint();
     }
 }
 
