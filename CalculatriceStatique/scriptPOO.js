@@ -85,7 +85,7 @@ class Model {
     }
 
     /**
-     * 
+     * En fonction de l'id du bouton, execute la fonction correspondante
      * @param {HTMLElement} bouton 
      */
     updateModelEffacement (bouton) {
@@ -124,6 +124,7 @@ class View {
     #ecranOperandeGauche;
     #ecranOperation
     #collectionBouton;
+    
     constructor(ecranID,ecranOperandeID,ecranOperationID) {
         this.#ecran = document.getElementById(ecranID);
         this.#ecranOperandeGauche = document.getElementById(ecranOperandeID);
@@ -153,9 +154,17 @@ class View {
         console.log("Vue initialisé");
     }
 
+    /**
+     * Met à jour l'écran.
+     * Si le texte est invalide, affiche OVERFLOW
+     * 
+     * @param {String} operandeGauche 
+     * @param {String} operation 
+     * @param {String} operandeDroite 
+     */
     update(operandeGauche,operation,operandeDroite) {
         console.log("Mise à Jour de la vue");
-        if (this.affichageEstValide(operandeDroite)) {
+        if (!this.affichageEstValide(operandeDroite)) {
             this.#ecran.innerText = "OVERFLOW"
         } else {
             this.#ecran.innerText = operandeDroite;
@@ -163,9 +172,17 @@ class View {
         this.#ecranOperandeGauche.innerText = operandeGauche;
     }
 
+    /**
+     * Vérifie si le texte entré est valide.
+     * C'est à dire qu'il ne contient pas plus de 10 chiffres, 
+     * le point, et la dernière opération saisie
+     * 
+     * @param {boolean} text 
+     * @returns 
+     */
     affichageEstValide(text) {
         let valide = false;
-        
+        //TODO Ecrire test
         return valide;
     }
 
@@ -192,6 +209,18 @@ class View {
         for (let index = 0; index < Object.keys(this.#collectionBouton['effacement']).length; index++) {
             const boutonEffacement = Object.values(this.#collectionBouton['effacement'])[index];
             boutonEffacement.addEventListener("click", () => {fonction(boutonEffacement)})
+        }
+    }
+    
+    /**
+     * Ajoute à chaque bouton représentant une opération un EventListener
+     * 
+     * @param {Function} fonction 
+     */
+    bindButtonOperation (fonction) {
+        for (let index = 0; index < Object.keys(this.#collectionBouton['operation']).length; index++) {
+            const boutonOperation = Object.values(this.#collectionBouton['operation'])[index];
+            boutonOperation.addEventListener("click", () => {fonction(boutonOperation)})
         }
     }
 }
