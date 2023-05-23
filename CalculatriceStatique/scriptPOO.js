@@ -64,12 +64,13 @@ class Model {
         } 
         this.#nombreAffiche = this.#nombreAffiche + "" + n;
         console.log("Mise à jour model ");
+        return this.#nombreAffiche;
     }
 
 
     updateAvecOperation (textOperation) {
         if (this.#operandeGauche === null) {
-            /* Exemple : L'utilisateur a saisi "3" puis "+", on enregistre ces donnés */
+            /* Exemple : L'utilisateur a saisi "3" puis "+", on enregistre ces données */
             this.#operandeGauche = parseFloat(this.#nombreAffiche);
             this.#operationSaisie = textOperation;
             this.#nombreAffiche = "";
@@ -78,10 +79,10 @@ class Model {
             let operandeDroite = parseFloat(this.#nombreAffiche);
             let operation = this.#operationSaisie;
             this.#nombreAffiche = this.calcul(operandeGauche, operation, operandeDroite)
-            
-            /*  */
+
             this.#operationSaisie = textOperation;
         }
+        //TODO Retourner quelque chose
     }
 
     /**
@@ -110,6 +111,17 @@ class Model {
         }
     }
 
+    updateModelExe () {
+        if (this.#operandeGauche !== null) {
+            let operandeGauche = parseFloat(this.#operandeGauche);
+            let operandeDroite = parseFloat(this.#nombreAffiche);
+            let operation = this.#operationSaisie;
+            this.#nombreAffiche = this.calcul(operandeGauche, operation, operandeDroite)
+            this.#operandeGauche = null;
+            this.#operationSaisie = null;
+        }
+    }
+
     effaceCalcul() {
         this.#nombreAffiche = 0;
         this.#operandeGauche = null;
@@ -117,11 +129,13 @@ class Model {
 
     effaceEntre() {
         this.#nombreAffiche = 0;
+        return this.#nombreAffiche;
     }
 
     effaceDernierChar() {
         this.#nombreAffiche = this.#nombreAffiche.toString().substring(0,this.#nombreAffiche.length-1);
         if (this.#nombreAffiche === "") this.#nombreAffiche = "0";
+        return this.#nombreAffiche;
     }
 }
 
@@ -241,6 +255,10 @@ class View {
     bindButtonPoint (fonction) {
         this.#collectionBouton['dot'].addEventListener("click", () => {fonction(this.#collectionBouton['dot'])})
     }
+
+    bindButtonExe (fonction) {
+        this.#collectionBouton['exe'].addEventListener("click", () => {fonction(this.#collectionBouton['exe'])})
+    }
 }
 
 class Controller {
@@ -262,6 +280,7 @@ class Controller {
         this.view.bindButtonEffacement(this.callBackEffacement);
         this.view.bindButtonOperation(this.callBackOperation);
         this.view.bindButtonPoint(this.callBackPoint);
+        this.view.bindButtonExe(this.callBackExe);
     }
 
     /**
@@ -281,6 +300,7 @@ class Controller {
     updateModelAvecNombre (n) {
         console.log("Controleur demande update model suite aux clique d'un nombre");
         this.model.updateModelAvecNombre(n)
+
     }
 
     /**
@@ -345,6 +365,15 @@ class Controller {
     callBackPoint = (bouton) => {
         console.log("Bouton Point cliqué");
         this.updateModelAvecPoint();
+    }
+
+    /**
+     * Callback appelé lors du clique sur le bouton exe
+     */
+    callBackExe = (bouton) => {
+        console.log("Bouton Exe cliqué");
+        this.model.updateModelExe();
+        this.updateView();
     }
 }
 
